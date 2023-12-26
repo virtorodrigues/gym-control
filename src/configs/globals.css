@@ -4,7 +4,6 @@
 @config "../../tailwind.config.ts";
 
 :root {
-  --white: #ffffff;
   --gray-100: #e1e1e6;
   --gray-300: #c4c4cc;
   --gray-400: #8d8d99;
@@ -17,10 +16,11 @@
   --green-500: #00875f;
 
   --red-500: #F75A68;
+
+
+  --white: #ffffff;
+  --white-500: #f3f4f6;
 }
-
-
-
 
 @layer base{
   :focus {
@@ -35,8 +35,8 @@
 }
 
 body {
-  background: var(--gray-900);
-  color: var(--gray-300);
+  background: var(--white-500);
+  color: var(--gray-900);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
