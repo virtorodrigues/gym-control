@@ -1,5 +1,4 @@
 "use client";
-import { Field } from '@/components/form/Field';
 import * as Form from '@radix-ui/react-form';
 import Image from 'next/image'
 import Link from 'next/link';
@@ -9,13 +8,37 @@ export default function Login() {
     <main className="flex min-h-screen flex-col items-center p-24">
       <div className='bg-white p-12 rounded-md text-center border-gray-200 border space-y-6'>
         <div className='space-y-3'>
-          <span className='text-5xl'>🏋🏻</span>
-          <h1 className='text-3xl mb-7 text-gray-600'>Acessar conta</h1>
+          <span className='text-5xl'>👨🏻‍💻</span>
+          <h1 className='text-3xl mb-7 text-gray-600'>Cadastrar Empresa</h1>
         </div>
         <Form.Root className="flex flex-col space-y-6 w-80">
           <div className='flex flex-col space-y-6'>
-            <Field label='email' type='email' placeholder='digite seu email...' name='email' />
-            <Field label='senha' type='password' placeholder='digite sua senha...' name='password' />
+            <Form.Field className="flex flex-col space-y-1" name="email">
+              <div className="flex items-baseline justify-between">
+                <Form.Label className="text-gray-400 text-sm">Email</Form.Label>
+              </div>
+              <Form.Control asChild>
+                <input
+                  className="py-2 px-3 text-slate-950 rounded-md border border-gray-200"
+                  type="email"
+                  placeholder='digite seu email...'
+                  required
+                />
+              </Form.Control>
+            </Form.Field>
+            <Form.Field className="flex flex-col space-y-1" name="email">
+              <div className="flex items-baseline justify-between">
+                <Form.Label className="text-gray-400 text-sm">Senha</Form.Label>
+              </div>
+              <Form.Control asChild>
+                <input
+                  className="py-2 px-3 text-slate-950 rounded-md border border-gray-200"
+                  type="password"
+                  placeholder='digite sua senha...'
+                  required
+                />
+              </Form.Control>
+            </Form.Field>
           </div>
           <div>
             <div className="text-end">
