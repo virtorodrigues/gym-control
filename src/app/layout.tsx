@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "../configs/globals.css";
 
 import { Roboto } from "next/font/google";
+import { CompanyRegisterProvider } from "@/contexts/companyRegister";
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -20,8 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={roboto.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning={true}>
+      <body className={roboto.className}>
+        <CompanyRegisterProvider>{children}</CompanyRegisterProvider>
+      </body>
     </html>
   );
 }
