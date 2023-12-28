@@ -6,6 +6,9 @@ import { prismaClient } from "@/lib/prisma";
 import { debug } from "console";
 import { pages } from "next/dist/build/templates/app-page";
 import { any } from "zod";
+import { NextConfig } from "next";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 interface IAuthUser {
   email: string;
@@ -13,7 +16,7 @@ interface IAuthUser {
   role: "admin" | "user";
 }
 
-export const authOptions = {
+export const authOptions: NextConfig = {
   adapter: PrismaAdapter(prismaClient),
   providers: [
     CredentialsProvider({
@@ -45,24 +48,57 @@ export const authOptions = {
         if (!matchPassword) {
           throw new Error("Senha incorreta!");
         }
+
+        const payload = {
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
+        const secretOrPrivateKey = process.env.SECRET!; //process.env.SECRET;
+        const expiresIn = "30 days";
+        const tokenEncoded = jwt.sign(payload, secretOrPrivateKey, {
+          //  algorithm: "RS256",
+          expiresIn: "30 days",
+        });
+
+        //  console.log(tokenEncoded);
+        const cookiesExpiresInSeconds = 60 * 60 * 24 * 30; // a month
+
+        cookies().set({
+          name: "token",
+          value: tokenEncoded,
+          maxAge: cookiesExpiresInSeconds,
+          path: "/",
+        });
+        // headers: {
+        //   'Set-Cookie': `token=${token}; Path=/; max-age=${cookiesExpiresInSeconds}`,
+        // },
+
         return user;
       },
     }),
   ],
   callbacks: {
-    jwt: (data: any) => {
-      console.log(data.user);
-      return {
-        ...data,
-      };
+    jwt: ({ token, user }: any) => {
+      if (user) {
+        return {
+          ...token,
+          user: {
+            role: user?.role,
+            name: user?.name,
+            email: user?.email,
+          },
+        };
+      }
+      return token;
     },
-    session: async ({ session, user, token }: any) => {
+    session: async ({ session, token }: any) => {
       return {
         ...session,
         user: {
-          role: token.token.user.role,
-          email: token.token.user.email,
-          name: token.token.user.name,
+          name: token.user.name,
+          email: token.user.email,
+          role: token.user.role,
         },
       };
     },
