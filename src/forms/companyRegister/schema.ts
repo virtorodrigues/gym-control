@@ -14,6 +14,21 @@ export const CompanyRegisterSchema = z.object({
 
 export type ICompanyRegister = z.infer<typeof CompanyRegisterSchema>;
 
+export const CompanyRegisterPasswordSchema = z.object({
+  password: z
+    .string()
+    .min(8, { message: "Insira uma senha válida" })
+    .max(30, { message: "Insira uma senha válida" }),
+  repeatPassword: z.string().min(8, { message: "Insira um email válido" }),
+  // .refine((val) => val !== password, {
+  //   message: "Selecione seu nível em programação",
+  // }),
+});
+
+export type ICompanyRegisterPassword = z.infer<
+  typeof CompanyRegisterPasswordSchema
+>;
+
 /**
  *   level: z
     .enum(["level-beginner", "level-pro", "unchecked"], {

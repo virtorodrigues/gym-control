@@ -3,6 +3,7 @@ import "../configs/globals.css";
 
 import { Roboto } from "next/font/google";
 import { CompanyRegisterProvider } from "@/contexts/companyRegister";
+import NextAuthProvider from "./api/auth/[...nextauth]/NextauthProvider";
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -22,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={roboto.className}>
-        <CompanyRegisterProvider>{children}</CompanyRegisterProvider>
+        <NextAuthProvider>
+          <CompanyRegisterProvider>{children}</CompanyRegisterProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

@@ -1,6 +1,8 @@
 "use client";
-import { ICompanyRegister } from "@/forms/companyRegister/schema";
-import { title } from "process";
+import {
+  ICompanyRegister,
+  ICompanyRegisterPassword,
+} from "@/forms/companyRegister/schema";
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 
 interface ICompanyRegisterContext {
@@ -12,6 +14,7 @@ interface ICompanyRegisterContext {
   repeatPassword: string;
   password: string;
   setCompanyRegisterForm: (data: ICompanyRegister) => void;
+  setPasswordCompanyRegisterForm: (data: ICompanyRegisterPassword) => void;
 }
 
 const CompanyRegisterContext = createContext({} as ICompanyRegisterContext);
@@ -37,9 +40,9 @@ export const CompanyRegisterProvider = ({
     setLogo(data.logo ?? "");
   };
 
-  const setPasswordCompanyRegisterForm = (data: ICompanyRegister) => {
-    setPassword(data.email);
-    setRepeatPassword(data.name);
+  const setPasswordCompanyRegisterForm = (data: ICompanyRegisterPassword) => {
+    setPassword(data.password);
+    setRepeatPassword(data.repeatPassword);
   };
 
   const value = useMemo(
@@ -52,6 +55,7 @@ export const CompanyRegisterProvider = ({
       password,
       repeatPassword,
       setCompanyRegisterForm,
+      setPasswordCompanyRegisterForm,
     }),
     [name, cel, document, logo, email, password, repeatPassword],
   );

@@ -6,20 +6,25 @@ import Link from "next/link";
 import { ArrowLeftIcon, CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  CompanyRegisterPasswordSchema,
   CompanyRegisterSchema,
   ICompanyRegister,
+  ICompanyRegisterPassword,
 } from "@/forms/companyRegister/schema";
 import { FormProvider, useForm } from "react-hook-form";
+import { useCompanyRegister } from "@/contexts/companyRegister";
+import email from "next-auth/providers/email";
+import { useRouter } from "next/navigation";
 
 export default function CompanyRegisterPassword() {
-  const createCompanyRegister = useForm<ICompanyRegister>({
-    resolver: zodResolver(CompanyRegisterSchema),
+  const { password, repeatPassword, name, cel, document, email, logo } =
+    useCompanyRegister();
+
+  const createCompanyRegister = useForm<ICompanyRegisterPassword>({
+    resolver: zodResolver(CompanyRegisterPasswordSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      cel: "",
-      document: "",
-      logo: "",
+      password: password,
+      repeatPassword: repeatPassword,
     },
   });
 
@@ -30,6 +35,36 @@ export default function CompanyRegisterPassword() {
     control,
   } = createCompanyRegister;
 
+  const router = useRouter();
+
+  const onSubmit = async (data: ICompanyRegisterPassword) => {
+    const request = await fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        password: data.password,
+        repeatPassword: data.repeatPassword,
+        name,
+        cel,
+        document,
+        email,
+        logo,
+        role: "admin",
+      }),
+    });
+
+    const response = await request.json();
+
+    if (!request.ok) {
+      console.log("nao foi possivel cadastrar empresa", response);
+    } else {
+      console.log("Empresa cadastrada com sucesso!: ", response);
+      router.push("/login");
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
       <div className="space-y-6 rounded-md border border-gray-200 bg-white p-12 text-center ">
@@ -39,7 +74,10 @@ export default function CompanyRegisterPassword() {
           <h2 className="text-lg leading-none text-gray-400">Criar senha</h2>
         </div>
         <FormProvider {...createCompanyRegister}>
-          <Form.Root className="flex w-96 flex-col gap-6">
+          <Form.Root
+            className="flex w-96 flex-col gap-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="grid grid-cols-12 gap-7">
               <Field
                 className="col-span-12"
@@ -75,7 +113,7 @@ export default function CompanyRegisterPassword() {
                 required
                 type="text"
                 placeholder=""
-                name="repeat password"
+                name="repeatPassword"
               />
             </div>
             <div className="flex items-end justify-between">

@@ -4,20 +4,20 @@ import {
   CompanyRegisterSchema,
   ICompanyRegister,
 } from "@/forms/companyRegister/schema";
+import { ILogin, LoginSchema } from "@/forms/login/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 
 export default function Login() {
-  const createCompanyRegister = useForm<ICompanyRegister>({
-    resolver: zodResolver(CompanyRegisterSchema),
+  const login = useForm<ILogin>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
-      name: "",
       email: "",
-      cel: "",
-      document: "",
-      logo: "",
+      password: "",
     },
   });
 
@@ -26,7 +26,24 @@ export default function Login() {
     formState: { isSubmitting },
     watch,
     control,
-  } = createCompanyRegister;
+  } = login;
+
+  const router = useRouter();
+
+  const onSubmit = async (data: ILogin) => {
+    const res = await signIn<"credentials">("credentials", {
+      ...data,
+      redirect: false,
+    });
+
+    if (!res?.ok) {
+      console.log("Não foi possivel logar", res);
+    } else {
+      console.log("Logado com sucesso!", res);
+
+      router.push("/admin/home");
+    }
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
@@ -35,8 +52,11 @@ export default function Login() {
           <span className="text-5xl">🏋🏻</span>
           <h1 className="mb-7 text-3xl text-gray-600">Acessar conta</h1>
         </div>
-        <FormProvider {...createCompanyRegister}>
-          <Form.Root className="flex w-96 flex-col space-y-6">
+        <FormProvider {...login}>
+          <Form.Root
+            className="flex w-96 flex-col space-y-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="flex flex-col space-y-6">
               <Field
                 label="email"

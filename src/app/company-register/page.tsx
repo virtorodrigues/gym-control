@@ -16,16 +16,17 @@ import { useCompanyRegister } from "@/contexts/companyRegister";
 import { useRouter } from "next/navigation";
 
 export default function CompanyRegister() {
-  const { setCompanyRegisterForm } = useCompanyRegister();
+  const { setCompanyRegisterForm, name, cel, document, email, logo } =
+    useCompanyRegister();
 
   const createCompanyRegister = useForm<ICompanyRegister>({
     resolver: zodResolver(CompanyRegisterSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      cel: "",
-      document: "",
-      logo: "",
+      name: name,
+      email: email,
+      cel: cel,
+      document: document,
+      logo: logo,
     },
   });
 
