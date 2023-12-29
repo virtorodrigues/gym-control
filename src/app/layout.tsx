@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "../configs/globals.css";
+import "../../styles/globals.css";
 
 import { Roboto } from "next/font/google";
 import { CompanyRegisterProvider } from "@/contexts/companyRegister";
