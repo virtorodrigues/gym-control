@@ -118,7 +118,7 @@ export default function CompanyRegisterPassword() {
             </div>
             <div className="flex items-end justify-between">
               <Link
-                href="/company-register"
+                href="/company/register"
                 className="flex items-center justify-center gap-2 rounded-md bg-white px-4 py-2 font-semibold  tracking-wider text-emerald-950 duration-300 hover:bg-red-900 hover:text-white"
               >
                 <ArrowLeftIcon />

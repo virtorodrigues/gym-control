@@ -40,6 +40,10 @@ export const authOptions: NextConfig = {
           throw new Error("Email do usuário não cadastrado!");
         }
 
+        if (user.role !== "admin") {
+          throw new Error("O usuário não é um admin!");
+        }
+
         const matchPassword = await bcrypt.compare(
           credentials.password as string,
           user.hashedPassword as string,
@@ -48,31 +52,6 @@ export const authOptions: NextConfig = {
         if (!matchPassword) {
           throw new Error("Senha incorreta!");
         }
-
-        const payload = {
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
-        const secretOrPrivateKey = process.env.SECRET!; //process.env.SECRET;
-        const expiresIn = "30 days";
-        const tokenEncoded = jwt.sign(payload, secretOrPrivateKey, {
-          //  algorithm: "RS256",
-          expiresIn: "30 days",
-        });
-
-        //  console.log(tokenEncoded);
-        const cookiesExpiresInSeconds = 60 * 60 * 24 * 30; // a month
-
-        cookies().set({
-          name: "token",
-          value: tokenEncoded,
-          maxAge: cookiesExpiresInSeconds,
-          path: "/",
-        });
-        // headers: {
-        //   'Set-Cookie': `token=${token}; Path=/; max-age=${cookiesExpiresInSeconds}`,
-        // },
 
         return user;
       },

@@ -7,10 +7,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 const middleware = (request: NextRequestWithAuth) => {
   const isPrivateRoutes = request.nextUrl.pathname.startsWith("/admin");
-  const isAdminUser = request.nextauth.token?.user?.role === "admin"!;
+  const user = request.nextauth.token?.user as any;
+  const isAdminUser = user?.role === "admin"!;
 
   if (isPrivateRoutes && !isAdminUser) {
-    return NextResponse.rewrite(new URL("/login", request.url));
+    return NextResponse.rewrite(new URL("/company/login", request.url));
   }
 
   return NextResponse.next();

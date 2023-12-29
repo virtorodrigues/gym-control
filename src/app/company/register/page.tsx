@@ -41,7 +41,7 @@ export default function CompanyRegister() {
 
   const onSubmit = (data: ICompanyRegister) => {
     setCompanyRegisterForm(data);
-    router.push("/company-register/password");
+    router.push("/company/register/password");
   };
 
   return (
