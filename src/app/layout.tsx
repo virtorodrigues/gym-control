@@ -4,6 +4,7 @@ import "../../styles/globals.css";
 import { Roboto } from "next/font/google";
 import { CompanyRegisterProvider } from "@/contexts/companyRegister";
 import NextAuthProvider from "./api/auth/NextAuthProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -26,6 +27,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <CompanyRegisterProvider>{children}</CompanyRegisterProvider>
         </NextAuthProvider>
+        <Toaster />
       </body>
     </html>
   );

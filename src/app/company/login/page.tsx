@@ -3,12 +3,19 @@ import { Field } from "@/components/form/Field";
 import { ILogin, LoginSchema } from "@/forms/login/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Login() {
+  const { toast } = useToast();
+
+  const { data, status, update } = useSession();
+
+  console.log(data);
+
   const login = useForm<ILogin>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -35,10 +42,19 @@ export default function Login() {
     console.log(res);
 
     if (!res?.ok) {
-      console.log("entrou aqui");
+      toast({
+        title: "Erro ao logar!",
+        description: res?.error,
+        variant: "destructive",
+      });
 
       console.log("Não foi possivel logar", res);
     } else {
+      toast({
+        title: `Logado com sucesso!`,
+        description: `Bem vindo ${data?.email || ""}`,
+        className: "bg-green-600 text-white",
+      });
       console.log("Logado com sucesso!", res);
 
       router.push("/admin/home");
