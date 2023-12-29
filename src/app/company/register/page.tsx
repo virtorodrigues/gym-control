@@ -1,8 +1,6 @@
 "use client";
 import { Field } from "@/components/form/Field";
 import * as Form from "@radix-ui/react-form";
-import Image from "next/image";
-import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -11,9 +9,9 @@ import {
   CompanyRegisterSchema,
   ICompanyRegister,
 } from "@/forms/companyRegister/schema";
-import { FormEvent } from "react";
 import { useCompanyRegister } from "@/contexts/companyRegister";
 import { useRouter } from "next/navigation";
+import { URL_REGISTER_PASSWORD_COMPANY } from "@/constants/urls";
 
 export default function CompanyRegister() {
   const { setCompanyRegisterForm, name, cel, document, email, logo } =
@@ -41,7 +39,7 @@ export default function CompanyRegister() {
 
   const onSubmit = (data: ICompanyRegister) => {
     setCompanyRegisterForm(data);
-    router.push("/company/register/password");
+    router.push(URL_REGISTER_PASSWORD_COMPANY);
   };
 
   return (

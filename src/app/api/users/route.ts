@@ -2,54 +2,52 @@ import { prismaClient } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 import bcrypt from "bcrypt";
+import { ICreateUser } from "./types";
+import { treatments } from "./treatments";
+import error from "next/error";
 
 export async function POST(request: NextRequest) {
-  const data = await request.json();
+  const data: ICreateUser = await request.json();
 
-  const { password, repeatPassword, name, cel, document, email, logo, role } =
-    data;
+  const { password, repeatPassword, name, cel, document, email, role } = data;
 
-  if (
-    !password ||
-    !repeatPassword ||
-    !name ||
-    !cel ||
-    !document ||
-    !email ||
-    !role //||
-    //!logo
-  ) {
-    return NextResponse.json(
-      { ok: false, message: "Dados inválidos passados pelo usuário!" },
-      { status: 400 },
-    );
-  }
-
-  const isUserExists = await prismaClient.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
-
-  if (isUserExists) {
-    return NextResponse.json(
-      { ok: false, message: "Usuário já existe na base de dados!" },
-      { status: 400 },
-    );
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await prismaClient.user.create({
-    data: {
+  try {
+    await treatments({
+      password,
+      repeatPassword,
       name,
       cel,
       document,
       email,
-      hashedPassword,
       role,
-    },
-  });
+    });
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  return NextResponse.json(user);
+    const user = await prismaClient.user.create({
+      data: {
+        email,
+        name,
+        hashedPassword,
+        role,
+        company: {
+          create: {
+            email,
+            name,
+            document,
+            cel,
+          },
+        },
+      },
+      include: {
+        company: true,
+      },
+    });
+
+    return NextResponse.json({ ok: true }, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { ok: false, message: error?.message },
+      { status: 400 },
+    );
+  }
 }

@@ -1,20 +1,9 @@
-import NextAuthConfig from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prismaClient } from "@/lib/prisma";
-import { debug } from "console";
-import { pages } from "next/dist/build/templates/app-page";
-import { any } from "zod";
 import { NextConfig } from "next";
-import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
-
-interface IAuthUser {
-  email: string;
-  name: string;
-  role: "admin" | "user";
-}
+import { URL_LOGIN_COMPANY } from "@/constants/urls";
 
 export const authOptions: NextConfig = {
   adapter: PrismaAdapter(prismaClient),
@@ -86,6 +75,6 @@ export const authOptions: NextConfig = {
   secret: process.env.SECRET,
   debug: process.env.NODE_ENV === "development",
   pages: {
-    signIn: "/login",
+    signIn: URL_LOGIN_COMPANY,
   },
 };

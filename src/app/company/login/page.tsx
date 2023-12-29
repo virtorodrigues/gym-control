@@ -8,13 +8,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
+import { URL_ADMIN_HOME, URL_REGISTER_COMPANY } from "@/constants/urls";
 
 export default function Login() {
   const { toast } = useToast();
 
   const { data, status, update } = useSession();
-
-  console.log(data);
 
   const login = useForm<ILogin>({
     resolver: zodResolver(LoginSchema),
@@ -39,8 +38,6 @@ export default function Login() {
       redirect: false,
     });
 
-    console.log(res);
-
     if (!res?.ok) {
       toast({
         title: "Erro ao logar!",
@@ -50,14 +47,13 @@ export default function Login() {
 
       console.log("Não foi possivel logar", res);
     } else {
+      router.push(URL_ADMIN_HOME);
       toast({
         title: `Logado com sucesso!`,
         description: `Bem vindo ${data?.email || ""}`,
         className: "bg-green-600 text-white",
       });
       console.log("Logado com sucesso!", res);
-
-      router.push("/admin/home");
     }
   };
 
@@ -105,7 +101,7 @@ export default function Login() {
                 </button>
               </Form.Submit>
               <Link
-                href="/company/register"
+                href={URL_REGISTER_COMPANY}
                 className="mt-4 flex w-full justify-center rounded-md bg-white px-4 py-2 font-semibold  tracking-wider text-emerald-950 duration-300 hover:bg-emerald-950 hover:text-white"
               >
                 Cadastrar

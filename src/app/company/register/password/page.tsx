@@ -1,22 +1,22 @@
 "use client";
 import { Field } from "@/components/form/Field";
 import * as Form from "@radix-ui/react-form";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeftIcon, CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CompanyRegisterPasswordSchema,
-  CompanyRegisterSchema,
-  ICompanyRegister,
   ICompanyRegisterPassword,
 } from "@/forms/companyRegister/schema";
 import { FormProvider, useForm } from "react-hook-form";
 import { useCompanyRegister } from "@/contexts/companyRegister";
-import email from "next-auth/providers/email";
 import { useRouter } from "next/navigation";
+import { URL_LOGIN_COMPANY, URL_REGISTER_COMPANY } from "@/constants/urls";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function CompanyRegisterPassword() {
+  const { toast } = useToast();
+
   const { password, repeatPassword, name, cel, document, email, logo } =
     useCompanyRegister();
 
@@ -50,18 +50,27 @@ export default function CompanyRegisterPassword() {
         cel,
         document,
         email,
-        logo,
         role: "admin",
       }),
     });
 
     const response = await request.json();
 
-    if (!request.ok) {
+    if (!response.ok) {
+      toast({
+        variant: "destructive",
+        title: `Não foi possível realizar o cadastro!`,
+        description: `${(response.message as string) || ""}`,
+      });
       console.log("nao foi possivel cadastrar empresa", response);
     } else {
+      toast({
+        title: `Cadasdtrado com sucesso!`,
+        description: `Bem vindo ${email || ""}`,
+        className: "bg-green-600 text-white",
+      });
       console.log("Empresa cadastrada com sucesso!: ", response);
-      router.push("/login");
+      router.push(URL_LOGIN_COMPANY);
     }
   };
 
@@ -118,7 +127,7 @@ export default function CompanyRegisterPassword() {
             </div>
             <div className="flex items-end justify-between">
               <Link
-                href="/company/register"
+                href={URL_REGISTER_COMPANY}
                 className="flex items-center justify-center gap-2 rounded-md bg-white px-4 py-2 font-semibold  tracking-wider text-emerald-950 duration-300 hover:bg-red-900 hover:text-white"
               >
                 <ArrowLeftIcon />
