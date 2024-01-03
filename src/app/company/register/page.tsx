@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { URL_REGISTER_PASSWORD_COMPANY } from "@/constants/urls";
 
 export default function CompanyRegister() {
-  const { setCompanyRegisterForm, name, cel, document, email, logo } =
+  const { setCompanyRegisterForm, name, cel, document, email } =
     useCompanyRegister();
 
   const createCompanyRegister = useForm<ICompanyRegister>({
@@ -24,7 +24,6 @@ export default function CompanyRegister() {
       email: email,
       cel: cel,
       document: document,
-      logo: logo,
     },
   });
 
@@ -89,13 +88,6 @@ export default function CompanyRegister() {
                 type="email"
                 placeholder="Email da empresa"
                 name="email"
-              />
-              <Field
-                className="col-span-12"
-                label="logo"
-                type="text"
-                placeholder="Logo da sua empresa"
-                name="logo"
               />
             </div>
             <div className="flex items-end justify-end">

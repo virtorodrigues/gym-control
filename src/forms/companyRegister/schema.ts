@@ -9,7 +9,6 @@ export const CompanyRegisterSchema = z.object({
     .transform((val) => val.toLowerCase()),
   cel: z.string().min(1, { message: "Insira um celular válido" }),
   document: z.string().min(1, { message: "Insira um documento válido" }),
-  logo: z.string(),
 });
 
 export type ICompanyRegister = z.infer<typeof CompanyRegisterSchema>;

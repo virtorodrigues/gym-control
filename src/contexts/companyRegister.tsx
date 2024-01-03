@@ -3,6 +3,7 @@ import {
   ICompanyRegister,
   ICompanyRegisterPassword,
 } from "@/forms/companyRegister/schema";
+import email from "next-auth/providers/email";
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 
 interface ICompanyRegisterContext {
@@ -10,7 +11,6 @@ interface ICompanyRegisterContext {
   cel: string;
   document: string;
   email: string;
-  logo?: string | undefined;
   repeatPassword: string;
   password: string;
   setCompanyRegisterForm: (data: ICompanyRegister) => void;
@@ -28,7 +28,6 @@ export const CompanyRegisterProvider = ({
   const [name, setName] = useState<string>("");
   const [cel, setCel] = useState<string>("");
   const [document, setDocument] = useState<string>("");
-  const [logo, setLogo] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repeatPassword, setRepeatPassword] = useState<string>("");
 
@@ -37,7 +36,6 @@ export const CompanyRegisterProvider = ({
     setName(data.name);
     setCel(data.cel);
     setDocument(data.document);
-    setLogo(data.logo ?? "");
   };
 
   const setPasswordCompanyRegisterForm = (data: ICompanyRegisterPassword) => {
@@ -51,13 +49,12 @@ export const CompanyRegisterProvider = ({
       name,
       cel,
       document,
-      logo,
       password,
       repeatPassword,
       setCompanyRegisterForm,
       setPasswordCompanyRegisterForm,
     }),
-    [name, cel, document, logo, email, password, repeatPassword],
+    [name, cel, document, email, password, repeatPassword],
   );
 
   return (

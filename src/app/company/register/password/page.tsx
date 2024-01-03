@@ -17,7 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 export default function CompanyRegisterPassword() {
   const { toast } = useToast();
 
-  const { password, repeatPassword, name, cel, document, email, logo } =
+  const { password, repeatPassword, name, cel, document, email } =
     useCompanyRegister();
 
   const createCompanyRegister = useForm<ICompanyRegisterPassword>({
