@@ -14,36 +14,25 @@ export const CompanyRegisterSchema = z.object({
 
 export type ICompanyRegister = z.infer<typeof CompanyRegisterSchema>;
 
-export const CompanyRegisterPasswordSchema = z.object({
-  password: z
-    .string()
-    .min(8, { message: "Insira uma senha válida" })
-    .max(30, { message: "Insira uma senha válida" }),
-  repeatPassword: z.string().min(8, { message: "Insira um email válido" }),
-  // .refine((val) => val !== password, {
-  //   message: "Selecione seu nível em programação",
-  // }),
-});
+export const CompanyRegisterPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Deve ter no mínimo 8 caracteres" })
+      .max(30, { message: "Deve ter no máximo 30 caracteres" })
+      .regex(/(?=.*[a-zà-ü]).*$/g, "Deve ter ao menos uma letra minúscula")
+      .regex(/(?=.*[A-ZÀ-Ü]).*$/g, "Deve ter ao menos uma letra maiúscula")
+      .regex(
+        /(?=.*[@!#$%^&*()/?+-]).*$/g,
+        "Deve ter ao menos um caractere especial",
+      ),
+    repeatPassword: z.string(),
+  })
+  .refine(({ password, repeatPassword }) => password === repeatPassword, {
+    message: "As senhas devem ser iguais",
+    path: ["repeatPassword"],
+  });
 
 export type ICompanyRegisterPassword = z.infer<
   typeof CompanyRegisterPasswordSchema
 >;
-
-/**
- *   level: z
-    .enum(["level-beginner", "level-pro", "unchecked"], {
-      required_error: "Selecione seu nível em programação",
-      invalid_type_error: "Selecione seu nível em programação",
-    })
-    .refine((val) => val !== "unchecked", {
-      message: "Selecione seu nível em programação",
-    }),
-  useTerms: z
-    .boolean({
-      required_error: "Concorde com os termos e políticas de privacidade",
-      invalid_type_error: "Concorde com os termos e políticas de privacidade",
-    })
-    .refine((val) => val === true, {
-      message: "Concorde com os termos e políticas de privacidade",
-    }),
- */

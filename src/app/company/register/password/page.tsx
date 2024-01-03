@@ -74,6 +74,59 @@ export default function CompanyRegisterPassword() {
     }
   };
 
+  const [watchPassword, watchRepeatPassword] = watch([
+    "password",
+    "repeatPassword",
+  ]);
+
+  const HandleValidPassword = () => {
+    const hasRightSize = watchPassword.length > 7 && watchPassword.length < 31;
+    const hasLowerCase = new RegExp(/(?=.*[a-zà-ü]).*$/g).test(watchPassword);
+    const hasUpperCase = new RegExp(/(?=.*[A-ZÀ-Ü]).*$/g).test(watchPassword);
+    const hasSpecialCharacter = new RegExp(/(?=.*[@!#$%^&*()/?+-]).*$/g).test(
+      watchPassword,
+    );
+
+    return (
+      <div className="col-span-12 flex flex-col gap-1">
+        <p className="col-span-12 flex items-center justify-start gap-2 text-left text-sm text-gray-500">
+          {hasRightSize ? (
+            <CheckIcon className="text-4xl text-green-600" />
+          ) : (
+            <Cross2Icon className="text-4xl text-red-600" />
+          )}
+          Deve ter no mínimo 8 caracteres e máximo 15
+        </p>
+        <p className="col-span-12 flex items-center justify-start gap-2 text-left text-sm text-gray-500">
+          {hasLowerCase ? (
+            <CheckIcon className="text-4xl text-green-600" />
+          ) : (
+            <Cross2Icon className="text-4xl text-red-600" />
+          )}
+          Deve ter no mínimo uma letra minúscula
+        </p>
+        <p className="col-span-12 flex items-center justify-start gap-2 text-left text-sm text-gray-500">
+          {hasUpperCase ? (
+            <CheckIcon className="text-4xl text-green-600" />
+          ) : (
+            <Cross2Icon className="text-4xl text-red-600" />
+          )}
+          Deve ter no mínimo uma letra maiúscula
+        </p>
+        <p className="col-span-12 flex items-center justify-start gap-2 text-left text-sm text-gray-500">
+          {hasSpecialCharacter ? (
+            <CheckIcon className="text-4xl text-green-600" />
+          ) : (
+            <Cross2Icon className="text-4xl text-red-600" />
+          )}
+          <span>
+            Deve ter no mínimo 1 caractere especial ex: @!#$%^&*()/?+-
+          </span>
+        </p>
+      </div>
+    );
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
       <div className="space-y-6 rounded-md border border-gray-200 bg-white p-12 text-center ">
@@ -96,31 +149,14 @@ export default function CompanyRegisterPassword() {
                 placeholder=""
                 name="password"
               />
-              <div className="col-span-12 flex flex-col gap-1">
-                <p className="col-span-12 flex items-center justify-start gap-2 text-left text-sm text-gray-500">
-                  <Cross2Icon className="text-4xl text-red-600" />
-                  Deve ter no mínimo 8 caracteres e máximo 15
-                </p>
-                <p className="col-span-12 flex items-center justify-start gap-2 text-left text-sm text-gray-500">
-                  <Cross2Icon className="text-4xl text-red-600" />
-                  Deve ter no mínimo uma letra minúscula
-                </p>
-                <p className="col-span-12 flex items-center justify-start gap-2 text-left text-sm text-gray-500">
-                  <Cross2Icon className="text-4xl text-red-600" />
-                  Deve ter no mínimo uma letra maiúscula
-                </p>
-                <p className="col-span-12 flex items-center justify-start gap-2 text-left text-sm text-gray-500">
-                  <Cross2Icon className="text-4xl text-red-600" />
-                  <span>
-                    Deve ter no mínimo 1 caractere especial ex: */-+;:/?!@#$%&
-                  </span>
-                </p>
-              </div>
+
+              <HandleValidPassword />
+
               <Field
                 className="col-span-12"
                 label="repetir senha"
                 required
-                type="text"
+                type="password"
                 placeholder=""
                 name="repeatPassword"
               />
