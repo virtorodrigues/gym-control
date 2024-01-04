@@ -35,3 +35,5 @@ export const CompanyRegisterPasswordSchema = z
 export type ICompanyRegisterPassword = z.infer<
   typeof CompanyRegisterPasswordSchema
 >;
+
+console.log("teste");
