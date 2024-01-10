@@ -33,7 +33,7 @@ model User {
   emailVerified  DateTime?
   image          String?
   role           String
-  hashedPassword String
+  hashedPassword String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   accounts       Account[]
@@ -62,6 +62,7 @@ model Student {
   email          String   @unique
   document       String?
   cel            String?
+  birthday       String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

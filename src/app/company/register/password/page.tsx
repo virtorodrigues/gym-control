@@ -13,6 +13,7 @@ import { useCompanyRegister } from "@/contexts/companyRegister";
 import { useRouter } from "next/navigation";
 import { URL_LOGIN_COMPANY, URL_REGISTER_COMPANY } from "@/constants/urls";
 import { useToast } from "@/components/ui/use-toast";
+import { name } from "tailwindcss";
 
 export default function CompanyRegisterPassword() {
   const { toast } = useToast();
@@ -44,13 +45,19 @@ export default function CompanyRegisterPassword() {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
+        isVerifyExistsPassword: true,
         password: data.password,
         repeatPassword: data.repeatPassword,
         name,
-        cel,
-        document,
         email,
         role: "admin",
+        cel,
+        company: {
+          name,
+          cel,
+          document,
+          email,
+        },
       }),
     });
 

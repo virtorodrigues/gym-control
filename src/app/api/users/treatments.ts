@@ -2,29 +2,38 @@ import { prismaClient } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { ICreateUser } from "./types";
 import bcrypt from "bcrypt";
+import email from "next-auth/providers/email";
 
 export const treatments = async ({
   password,
   repeatPassword,
   name,
   cel,
-  document,
   email,
   role,
+  isVerifyExistsPassword,
+  company,
+  student,
 }: ICreateUser) => {
+  const document = company ? company.document : student?.document;
+
   if (
-    !password ||
-    !repeatPassword ||
+    (isVerifyExistsPassword && !password) ||
+    (isVerifyExistsPassword && !repeatPassword) ||
     !name ||
-    !cel ||
     !document ||
+    !cel ||
     !email ||
     !role
   ) {
     throw new Error("Dados inválidos passados pelo usuário!");
   }
 
-  if (password !== repeatPassword) {
+  if (student && !student.birthday) {
+    throw new Error("Dados inválidos passados pelo usuário!");
+  }
+
+  if (isVerifyExistsPassword && password !== repeatPassword) {
     throw new Error("As senhas precisam ser iguais!");
   }
 

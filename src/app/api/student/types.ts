@@ -3,11 +3,9 @@ export interface ICreateUser {
   repeatPassword: string;
   name: string;
   cel: string;
+  document: string;
   email: string;
   role: string;
-  isVerifyExistsPassword: boolean;
-  company?: ICreateCompany;
-  student?: ICreateStudent;
 }
 
 export interface ICreateCompany {
@@ -15,12 +13,4 @@ export interface ICreateCompany {
   cel: string;
   document: string;
   email: string;
-}
-
-export interface ICreateStudent {
-  name: string;
-  cel: string;
-  document: string;
-  email: string;
-  birthday: string;
 }

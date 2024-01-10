@@ -1,6 +1,7 @@
 import * as Form from "@radix-ui/react-form";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -14,6 +15,9 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
       <h1>Home</h1>
+      <Link href={"/admin/student/create"}>
+        <button>Criar Aluno</button>
+      </Link>
     </main>
   );
 }

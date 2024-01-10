@@ -4,44 +4,84 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { ICreateUser } from "./types";
 import { treatments } from "./treatments";
-import error from "next/error";
 
 export async function POST(request: NextRequest) {
   const data: ICreateUser = await request.json();
 
-  const { password, repeatPassword, name, cel, document, email, role } = data;
+  const {
+    password,
+    repeatPassword,
+    isVerifyExistsPassword,
+    company,
+    student,
+    name,
+    cel,
+    email,
+    role,
+  } = data;
+
+  console.log("role: ", role);
 
   try {
     await treatments({
       password,
       repeatPassword,
+      isVerifyExistsPassword,
+      company,
+      student,
       name,
       cel,
-      document,
       email,
       role,
     });
-    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prismaClient.user.create({
-      data: {
-        email,
-        name,
-        hashedPassword,
-        role,
-        company: {
-          create: {
-            email,
-            name,
-            document,
-            cel,
+    let user = null;
+
+    if (role == "admin" && company) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user = await prismaClient.user.create({
+        data: {
+          email,
+          name,
+          hashedPassword,
+          role,
+          company: {
+            create: {
+              email,
+              name,
+              document: company.document,
+              cel,
+            },
           },
         },
-      },
-      include: {
-        company: true,
-      },
-    });
+        include: {
+          company: true,
+        },
+      });
+    } else {
+      console.log("é student");
+      user = await prismaClient.user.create({
+        data: {
+          email,
+          name,
+          role,
+          student: {
+            create: {
+              email,
+              name,
+              document: student?.document,
+              birthday: student?.birthday,
+              cel,
+            },
+          },
+        },
+        include: {
+          student: true,
+        },
+      });
+    }
+
+    console.log("user: ", user);
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (error: any) {
