@@ -4,16 +4,16 @@ import * as Form from "@radix-ui/react-form";
 import Link from "next/link";
 import { ArrowLeftIcon, CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CompanyRegisterPasswordSchema,
-  ICompanyRegisterPassword,
-} from "@/forms/companyRegister/schema";
+
 import { FormProvider, useForm } from "react-hook-form";
 import { useCompanyRegister } from "@/contexts/companyRegister";
 import { useRouter } from "next/navigation";
 import { URL_LOGIN_COMPANY, URL_REGISTER_COMPANY } from "@/constants/urls";
 import { useToast } from "@/components/ui/use-toast";
-import { name } from "tailwindcss";
+import {
+  IRegisterPassword,
+  RegisterPasswordSchema,
+} from "@/forms/password/schma";
 
 export default function CompanyRegisterPassword() {
   const { toast } = useToast();
@@ -21,8 +21,8 @@ export default function CompanyRegisterPassword() {
   const { password, repeatPassword, name, cel, document, email } =
     useCompanyRegister();
 
-  const createCompanyRegister = useForm<ICompanyRegisterPassword>({
-    resolver: zodResolver(CompanyRegisterPasswordSchema),
+  const createCompanyRegister = useForm<IRegisterPassword>({
+    resolver: zodResolver(RegisterPasswordSchema),
     defaultValues: {
       password: password,
       repeatPassword: repeatPassword,
@@ -38,7 +38,7 @@ export default function CompanyRegisterPassword() {
 
   const router = useRouter();
 
-  const onSubmit = async (data: ICompanyRegisterPassword) => {
+  const onSubmit = async (data: IRegisterPassword) => {
     const request = await fetch("/api/users", {
       method: "POST",
       headers: {
@@ -69,14 +69,12 @@ export default function CompanyRegisterPassword() {
         title: `Não foi possível realizar o cadastro!`,
         description: `${(response.message as string) || ""}`,
       });
-      console.log("nao foi possivel cadastrar empresa", response);
     } else {
       toast({
         title: `Cadasdtrado com sucesso!`,
         description: `Bem vindo ${email || ""}`,
         className: "bg-green-600 text-white",
       });
-      console.log("Empresa cadastrada com sucesso!: ", response);
       router.push(URL_LOGIN_COMPANY);
     }
   };

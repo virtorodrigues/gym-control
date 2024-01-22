@@ -8,3 +8,4 @@ export const URL_FIRST_ACCESS_STUDENT = "/student/login/first_access";
 export const URL_LOGIN_STUDENT = "/student/login";
 export const URL_FIRST_ACCESS_PASSWORD_STUDENT =
   "/student/login/first_access/password";
+export const URL_HOME_STUDENT = "/student/home";

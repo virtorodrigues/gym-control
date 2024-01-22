@@ -3,27 +3,26 @@ import { Field } from "@/components/form/Field";
 import {
   FirstAccessLoginSchema,
   IFirstAccessLogin,
-  ILogin,
-  LoginSchema,
 } from "@/forms/login/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import {
-  URL_ADMIN_HOME,
   URL_FIRST_ACCESS_PASSWORD_STUDENT,
   URL_FIRST_ACCESS_STUDENT,
-  URL_REGISTER_COMPANY,
 } from "@/constants/urls";
+import { useStudentFirstAccess } from "@/contexts/studentFirstAccessRegister";
 
 export default function StudentLogin() {
   const { toast } = useToast();
 
   const { data, status, update } = useSession();
+
+  const { setEmail } = useStudentFirstAccess();
 
   const firstAccessForm = useForm<IFirstAccessLogin>({
     resolver: zodResolver(FirstAccessLoginSchema),
@@ -54,42 +53,16 @@ export default function StudentLogin() {
 
     const response = await request.json();
 
-    console.log(response);
-
     if (!response.ok) {
       toast({
         variant: "destructive",
         title: `Usuário não cadastrado!`,
         description: `${(response.message as string) || ""}`,
       });
-      console.log("nao foi possivel cadastrar empresa", response);
     } else {
+      setEmail(data.email);
       router.push(URL_FIRST_ACCESS_PASSWORD_STUDENT);
     }
-
-    /*
-    const res = await signIn<"credentials">("credentials", {
-      ...data,
-      redirect: false,
-    });
-
-    if (!res?.ok) {
-      toast({
-        title: "Erro ao logar!",
-        description: res?.error,
-        variant: "destructive",
-      });
-
-      console.log("Não foi possivel logar", res);
-    } else {
-      router.push(URL_ADMIN_HOME);
-      toast({
-        title: `Logado com sucesso!`,
-        description: `Bem vindo ${data?.email || ""}`,
-        className: "bg-green-600 text-white",
-      });
-      console.log("Logado com sucesso!", res);
-    }*/
   };
 
   return (
@@ -125,7 +98,7 @@ export default function StudentLogin() {
                 </a>
               </div>
               <Form.Submit asChild>
-                <button className="mt-4 w-full rounded-md bg-orange-500 px-4 py-2 font-semibold tracking-wider text-gray-200 duration-300 hover:brightness-90">
+                <button className="mt-4 w-full rounded-md bg-orange-500 px-4 py-2 font-semibold tracking-wider text-white duration-300 hover:brightness-90">
                   Entrar
                 </button>
               </Form.Submit>

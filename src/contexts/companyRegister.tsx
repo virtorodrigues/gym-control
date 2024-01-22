@@ -1,9 +1,6 @@
 "use client";
-import {
-  ICompanyRegister,
-  ICompanyRegisterPassword,
-} from "@/forms/companyRegister/schema";
-import email from "next-auth/providers/email";
+import { ICompanyRegister } from "@/forms/companyRegister/schema";
+import { IRegisterPassword } from "@/forms/password/schma";
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 
 interface ICompanyRegisterContext {
@@ -14,7 +11,7 @@ interface ICompanyRegisterContext {
   repeatPassword: string;
   password: string;
   setCompanyRegisterForm: (data: ICompanyRegister) => void;
-  setPasswordCompanyRegisterForm: (data: ICompanyRegisterPassword) => void;
+  setPasswordCompanyRegisterForm: (data: IRegisterPassword) => void;
 }
 
 const CompanyRegisterContext = createContext({} as ICompanyRegisterContext);
@@ -38,7 +35,7 @@ export const CompanyRegisterProvider = ({
     setDocument(data.document);
   };
 
-  const setPasswordCompanyRegisterForm = (data: ICompanyRegisterPassword) => {
+  const setPasswordCompanyRegisterForm = (data: IRegisterPassword) => {
     setPassword(data.password);
     setRepeatPassword(data.repeatPassword);
   };

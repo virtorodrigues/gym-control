@@ -33,7 +33,7 @@ export default function Login() {
   const router = useRouter();
 
   const onSubmit = async (data: ILogin) => {
-    const res = await signIn<"credentials">("credentials", {
+    const res = await signIn<"credentials">("admin-credentials", {
       ...data,
       redirect: false,
     });
@@ -44,8 +44,6 @@ export default function Login() {
         description: res?.error,
         variant: "destructive",
       });
-
-      console.log("Não foi possivel logar", res);
     } else {
       router.push(URL_ADMIN_HOME);
       toast({
@@ -53,7 +51,6 @@ export default function Login() {
         description: `Bem vindo ${data?.email || ""}`,
         className: "bg-green-600 text-white",
       });
-      console.log("Logado com sucesso!", res);
     }
   };
 
@@ -96,7 +93,7 @@ export default function Login() {
                 </a>
               </div>
               <Form.Submit asChild>
-                <button className="mt-4 w-full rounded-md bg-orange-500 px-4 py-2 font-semibold tracking-wider text-gray-200 duration-300 hover:brightness-90">
+                <button className="mt-4 w-full rounded-md bg-orange-500 px-4 py-2 font-semibold tracking-wider text-white duration-300 hover:brightness-90">
                   Entrar
                 </button>
               </Form.Submit>

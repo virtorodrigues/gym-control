@@ -11,8 +11,10 @@ import { useToast } from "@/components/ui/use-toast";
 import {
   URL_ADMIN_HOME,
   URL_FIRST_ACCESS_STUDENT,
+  URL_HOME_STUDENT,
   URL_REGISTER_COMPANY,
 } from "@/constants/urls";
+import router from "next/router";
 
 export default function StudentLogin() {
   const { toast } = useToast();
@@ -37,10 +39,7 @@ export default function StudentLogin() {
   const router = useRouter();
 
   const onSubmit = async (data: ILogin) => {
-    console.log("asdasdas");
-    console.log(data);
-    /*
-    const res = await signIn<"credentials">("credentials", {
+    const res = await signIn<"credentials">("user-credentials", {
       ...data,
       redirect: false,
     });
@@ -51,17 +50,14 @@ export default function StudentLogin() {
         description: res?.error,
         variant: "destructive",
       });
-
-      console.log("Não foi possivel logar", res);
     } else {
-      router.push(URL_ADMIN_HOME);
       toast({
         title: `Logado com sucesso!`,
         description: `Bem vindo ${data?.email || ""}`,
         className: "bg-green-600 text-white",
       });
-      console.log("Logado com sucesso!", res);
-    }*/
+      router.push(URL_HOME_STUDENT);
+    }
   };
 
   return (
@@ -103,7 +99,7 @@ export default function StudentLogin() {
                 </a>
               </div>
               <Form.Submit asChild>
-                <button className="mt-4 w-full rounded-md bg-orange-500 px-4 py-2 font-semibold tracking-wider text-gray-200 duration-300 hover:brightness-90">
+                <button className="mt-4 w-full rounded-md bg-orange-500 px-4 py-2 font-semibold tracking-wider text-white duration-300 hover:brightness-90">
                   Entrar
                 </button>
               </Form.Submit>

@@ -6,6 +6,7 @@ import { CompanyRegisterProvider } from "@/contexts/companyRegister";
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/header";
 import NextAuthProvider from "@/configs/NextAuthProvider";
+import { StudentRegisterProvider } from "@/contexts/studentFirstAccessRegister";
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -27,8 +28,10 @@ export default function RootLayout({
       <body className={roboto.className}>
         <NextAuthProvider>
           <CompanyRegisterProvider>
-            <Header />
-            {children}
+            <StudentRegisterProvider>
+              <Header />
+              {children}
+            </StudentRegisterProvider>
           </CompanyRegisterProvider>
         </NextAuthProvider>
         <Toaster />

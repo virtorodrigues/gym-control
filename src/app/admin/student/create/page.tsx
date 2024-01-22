@@ -66,15 +66,12 @@ export default function CreateStudent() {
         title: `Não foi possível realizar o cadastro!`,
         description: `${(response.message as string) || ""}`,
       });
-      console.log("nao foi possivel cadastrar aluno", response);
     } else {
       toast({
         title: `Cadasdtrado com sucesso!`,
         // description: `Bem vindo ${email || ""}`,
         className: "bg-green-600 text-white",
       });
-      console.log("Empresa cadastrada com sucesso!: ", response);
-      // router.push(URL_LOGIN_COMPANY);
     }
   };
 
@@ -137,7 +134,6 @@ export default function CreateStudent() {
               <Form.Submit asChild>
                 <button className="mt-4 flex items-center justify-center gap-2 rounded-md bg-green-700 px-6 py-2 font-semibold tracking-wider text-gray-200 duration-300 hover:brightness-110">
                   Salvar
-                  <PlusIcon fontStyle="bold" className="font-bold" />
                 </button>
               </Form.Submit>
             </div>

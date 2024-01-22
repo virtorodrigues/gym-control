@@ -20,8 +20,6 @@ export async function POST(request: NextRequest) {
     role,
   } = data;
 
-  console.log("role: ", role);
-
   try {
     await treatments({
       password,
@@ -59,7 +57,6 @@ export async function POST(request: NextRequest) {
         },
       });
     } else {
-      console.log("é student");
       user = await prismaClient.user.create({
         data: {
           email,
@@ -80,8 +77,6 @@ export async function POST(request: NextRequest) {
         },
       });
     }
-
-    console.log("user: ", user);
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (error: any) {

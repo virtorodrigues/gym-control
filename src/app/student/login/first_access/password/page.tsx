@@ -4,27 +4,26 @@ import * as Form from "@radix-ui/react-form";
 import Link from "next/link";
 import { ArrowLeftIcon, CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CompanyRegisterPasswordSchema,
-  ICompanyRegisterPassword,
-} from "@/forms/companyRegister/schema";
 import { FormProvider, useForm } from "react-hook-form";
-import { useCompanyRegister } from "@/contexts/companyRegister";
 import { useRouter } from "next/navigation";
-import { URL_LOGIN_COMPANY, URL_REGISTER_COMPANY } from "@/constants/urls";
+import { URL_FIRST_ACCESS_STUDENT, URL_LOGIN_STUDENT } from "@/constants/urls";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  IRegisterPassword,
+  RegisterPasswordSchema,
+} from "@/forms/password/schma";
+import { useStudentFirstAccess } from "@/contexts/studentFirstAccessRegister";
 
 export default function StudentRegisterPassword() {
   const { toast } = useToast();
 
-  const { password, repeatPassword, name, cel, document, email } =
-    useCompanyRegister();
+  const { email } = useStudentFirstAccess();
 
-  const createCompanyRegister = useForm<ICompanyRegisterPassword>({
-    resolver: zodResolver(CompanyRegisterPasswordSchema),
+  const createCompanyRegister = useForm<IRegisterPassword>({
+    resolver: zodResolver(RegisterPasswordSchema),
     defaultValues: {
-      password: password,
-      repeatPassword: repeatPassword,
+      password: "",
+      repeatPassword: "",
     },
   });
 
@@ -37,26 +36,16 @@ export default function StudentRegisterPassword() {
 
   const router = useRouter();
 
-  const onSubmit = async (data: ICompanyRegisterPassword) => {
-    const request = await fetch("/api/users", {
-      method: "POST",
+  const onSubmit = async (data: IRegisterPassword) => {
+    const request = await fetch("/api/student/first-access", {
+      method: "PUT",
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        isVerifyExistsPassword: true,
         password: data.password,
         repeatPassword: data.repeatPassword,
-        name,
         email,
-        role: "admin",
-        cel,
-        company: {
-          name,
-          cel,
-          document,
-          email,
-        },
       }),
     });
 
@@ -65,18 +54,16 @@ export default function StudentRegisterPassword() {
     if (!response.ok) {
       toast({
         variant: "destructive",
-        title: `Não foi possível realizar o cadastro!`,
+        title: `Não foi possível finalizar o cadastro!`,
         description: `${(response.message as string) || ""}`,
       });
-      console.log("nao foi possivel cadastrar empresa", response);
     } else {
       toast({
-        title: `Cadasdtrado com sucesso!`,
+        title: `Cadastrado com sucesso!`,
         description: `Bem vindo ${email || ""}`,
         className: "bg-green-600 text-white",
       });
-      console.log("Empresa cadastrada com sucesso!: ", response);
-      router.push(URL_LOGIN_COMPANY);
+      router.push(URL_LOGIN_STUDENT);
     }
   };
 
@@ -138,7 +125,7 @@ export default function StudentRegisterPassword() {
       <div className="space-y-6 rounded-md border border-gray-200 bg-white p-12 text-center ">
         <div className="space-y-2">
           <span className="text-5xl">👨🏻‍💻</span>
-          <h1 className="text-3xl text-gray-600">Cadastrar Empresa</h1>
+          <h1 className="text-3xl text-gray-600">Finalizar cadastro</h1>
           <h2 className="text-lg leading-none text-gray-400">Criar senha</h2>
         </div>
         <FormProvider {...createCompanyRegister}>
@@ -169,7 +156,7 @@ export default function StudentRegisterPassword() {
             </div>
             <div className="flex items-end justify-between">
               <Link
-                href={URL_REGISTER_COMPANY}
+                href={URL_FIRST_ACCESS_STUDENT}
                 className="flex items-center justify-center gap-2 rounded-md bg-white px-4 py-2 font-semibold  tracking-wider text-emerald-950 duration-300 hover:bg-red-900 hover:text-white"
               >
                 <ArrowLeftIcon />

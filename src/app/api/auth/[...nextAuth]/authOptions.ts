@@ -3,13 +3,14 @@ import bcrypt from "bcrypt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prismaClient } from "@/lib/prisma";
 import { NextConfig } from "next";
-import { URL_LOGIN_COMPANY } from "@/constants/urls";
+import { URL_LOGIN_COMPANY, URL_LOGIN_STUDENT } from "@/constants/urls";
 
 export const authOptions: NextConfig = {
   adapter: PrismaAdapter(prismaClient),
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      id: "admin-credentials",
+      name: "admin credentials",
       credentials: {
         email: { label: "email", type: "text", placeholder: "email" },
         password: { label: "password", type: "password", placeholder: "senha" },
@@ -31,6 +32,44 @@ export const authOptions: NextConfig = {
 
         if (user.role !== "admin") {
           throw new Error("O usuário não é um admin!");
+        }
+
+        const matchPassword = await bcrypt.compare(
+          credentials.password as string,
+          user.hashedPassword as string,
+        );
+
+        if (!matchPassword) {
+          throw new Error("Senha incorreta!");
+        }
+
+        return user;
+      },
+    }),
+    CredentialsProvider({
+      id: "user-credentials",
+      name: "user credentials",
+      credentials: {
+        email: { label: "email", type: "text", placeholder: "email" },
+        password: { label: "password", type: "password", placeholder: "senha" },
+      },
+      async authorize(credentials, req): Promise<any> {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Dados do usuário são necessários");
+        }
+
+        const user = await prismaClient.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
+
+        if (!user) {
+          throw new Error("Email do usuário não cadastrado!");
+        }
+
+        if (user.role !== "user") {
+          throw new Error("O usuário não possui permissão!");
         }
 
         const matchPassword = await bcrypt.compare(
@@ -74,7 +113,11 @@ export const authOptions: NextConfig = {
   session: { strategy: "jwt" },
   secret: process.env.SECRET,
   debug: process.env.NODE_ENV === "development",
-  pages: {
-    signIn: URL_LOGIN_COMPANY,
-  },
+  // redirect: false,
+  // pages: {
+  //   signIn: "admin" ? URL_LOGIN_COMPANY : URL_LOGIN_STUDENT,
+  // },
+  // },
+  //   signIn: URL_LOGIN_COMPANY,
+  // },
 };

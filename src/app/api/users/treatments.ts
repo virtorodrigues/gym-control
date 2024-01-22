@@ -1,8 +1,5 @@
 import { prismaClient } from "@/lib/prisma";
-import { NextResponse } from "next/server";
 import { ICreateUser } from "./types";
-import bcrypt from "bcrypt";
-import email from "next-auth/providers/email";
 
 export const treatments = async ({
   password,
