@@ -18,6 +18,9 @@ export default function Home() {
       <Link href={"/admin/student/create"}>
         <button>Criar Aluno</button>
       </Link>
+      <Link href={"/admin/student/list"}>
+        <button>Listar Aluno</button>
+      </Link>
     </main>
   );
 }
