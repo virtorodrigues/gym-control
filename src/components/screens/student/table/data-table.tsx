@@ -53,11 +53,11 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="rounded-md border">
+    <>
+      <div className="mb-10 w-[1280px] max-w-full">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter emails..."
+            placeholder="Filtrar"
             value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("email")?.setFilterValue(event.target.value)
@@ -66,12 +66,18 @@ export function DataTable<TData, TValue>({
           />
         </div>
         <Table>
-          <TableHeader>
+          <TableHeader className="rounded bg-slate-200 hover:bg-slate-200 hover:opacity-100">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                className="cursor-text bg-slate-200 hover:bg-slate-200 hover:opacity-100"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className="cursor-text bg-slate-200 hover:bg-slate-200 hover:opacity-100"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -84,10 +90,11 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  className="cursor-pointer bg-white pb-5 hover:bg-slate-100"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
@@ -114,25 +121,8 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Anterior
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Próxima
-        </Button>
-      </div>
+
       <DataTablePagination table={table} />
-    </div>
+    </>
   );
 }

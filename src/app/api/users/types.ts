@@ -23,4 +23,5 @@ export interface ICreateStudent {
   document: string;
   email: string;
   birthday: string;
+  companyEmail: string;
 }

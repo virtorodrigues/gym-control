@@ -14,6 +14,7 @@ import {
 import { URL_LOGIN_COMPANY } from "@/constants/urls";
 import email from "next-auth/providers/email";
 import { toast } from "@/components/ui/use-toast";
+import { useSession } from "next-auth/react";
 
 export default function CreateStudent() {
   const createStudentRegister = useForm<IStudentRegister>({
@@ -35,6 +36,7 @@ export default function CreateStudent() {
   } = createStudentRegister;
 
   const router = useRouter();
+  const { data: companyData } = useSession();
 
   const onSubmit = async (data: IStudentRegister) => {
     const request = await fetch("/api/users", {
@@ -54,6 +56,7 @@ export default function CreateStudent() {
           document: data.document,
           email: data.email,
           birthday: data.birthday,
+          companyEmail: companyData?.user?.email
         },
       }),
     });
@@ -132,7 +135,7 @@ export default function CreateStudent() {
             </div>
             <div className="flex items-end justify-end">
               <Form.Submit asChild>
-                <button className="mt-4 flex items-center justify-center gap-2 rounded-md bg-green-700 px-6 py-2 font-semibold tracking-wider text-gray-200 duration-300 hover:brightness-110">
+                <button disabled={isSubmitting} className="mt-4 flex items-center justify-center gap-2 rounded-md bg-green-700 px-6 py-2 font-semibold tracking-wider text-gray-200 duration-300 hover:brightness-110">
                   Salvar
                 </button>
               </Form.Submit>

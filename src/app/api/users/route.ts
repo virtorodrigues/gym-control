@@ -57,6 +57,20 @@ export async function POST(request: NextRequest) {
         },
       });
     } else {
+
+      const admin = await prismaClient.company.findUnique({
+        where: {
+          email: student?.companyEmail,
+        },
+      });
+
+      if (!admin) {
+        return NextResponse.json(
+          { ok: false, message: "Empresa não encontrada para registrar seu aluno!" },
+          { status: 400 },
+        );
+      }
+
       user = await prismaClient.user.create({
         data: {
           email,
@@ -69,6 +83,11 @@ export async function POST(request: NextRequest) {
               document: student?.document,
               birthday: student?.birthday,
               cel,
+              company: {
+                connect: {
+                  id: admin?.id
+                }
+              }
             },
           },
         },
