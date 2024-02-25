@@ -54,7 +54,7 @@ export const AsideMenu =  () => {
       <MenuItems
         icon={<UserRoundPlusIcon size={18} />}
         href="/admin/student/create"
-        title="Criar aluno"
+        title="Cadastrar aluno"
        />
       <MenuItems
         icon={<ListChecks size={18} />}
@@ -66,8 +66,8 @@ export const AsideMenu =  () => {
 
       <MenuItems
         icon={<DumbbellIcon size={18} />}
-        href="/admin/student/create"
-        title="Criar exercício"
+        href="/admin/exercise/create"
+        title="Cadastrar exercício"
       />
       <MenuItems
         icon={<ListChecks size={18} />}
