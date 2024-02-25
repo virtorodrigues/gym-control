@@ -1,30 +1,28 @@
 "use client";
-import { Home } from "lucide-react";
+
+import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export const Header = () => {
-  const { data } = useSession();
-
+export const Header =  () => {
   const router = useRouter();
 
   const redirectTo = ({ to }: { to: string }) => {
     router.push(to);
   };
 
+  const { data } =  useSession();
+
+  if (!data) {
+    return <></>
+  }
+
   return (
-    <header className="flex h-12 w-full items-center justify-center gap-16 bg-orange-700 text-white">
-      <button onClick={() => redirectTo({ to: "/admin/home" })}>Home</button>
-      <button>Alunos</button>
-      <button>Perfil</button>
-      <button>Exercícios</button>
-      {data?.user ? (
-        <button onClick={() => signOut()}>Sair</button>
-      ) : (
-        <button onClick={() => redirectTo({ to: "/company/login" })}>
-          Login
-        </button>
-      )}
+    <header className="flex bg-white justify-end py-4 px-8 gap-6">
+      <div>
+        <p className="text-xs text-gray-600">Olá</p> <strong className="text-gray-600"> {data.user?.email} </strong>
+      </div>
+      <button onClick={() => signOut()} className="hover:text-red-700">Sair</button>
     </header>
   );
 };

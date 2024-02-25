@@ -7,8 +7,6 @@ import { DataTable } from "./data-table";
 
 export default async function Table({ data }: { data: any }) {
   return (
-    <div className="">
-      <DataTable columns={columns} data={data} />
-    </div>
+    <DataTable columns={columns} data={data} />
   );
 }

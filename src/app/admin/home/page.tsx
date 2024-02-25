@@ -13,7 +13,7 @@ export default function Home() {
   // console.log(response);
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <main className="flex min-h-screen flex-col items-center p-24 pt-11 w-full">
       <h1>Home</h1>
       <Link href={"/admin/student/create"}>
         <button>Criar Aluno</button>

@@ -7,8 +7,6 @@ import { getSession } from "next-auth/react";
 export default async function StudentListPage() {
   const session = await getServerSession()
 
-  //const students: IStudent[] = await prismaClient.student.findMany();
-
   const company = await prismaClient.company.findFirst({
     where: {
       email: session?.user?.email || ""
@@ -18,15 +16,10 @@ export default async function StudentListPage() {
     },
   } );
 
-  console.log("aaaaaaaaaaaaaaaaa: ", company)
-
-
   const students: IStudent[]  = company?.students || [];
 
-  console.log("bbbbbbbbbbbbb: ", students)
-
   return (
-    <main className="flex min-h-screen flex-col items-center p-24 pt-11">
+    <main className="flex min-h-screen flex-col items-center p-24 pt-11 w-full">
       <StudentList students={students} />
     </main>
   );

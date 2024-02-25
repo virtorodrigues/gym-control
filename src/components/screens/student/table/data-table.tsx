@@ -20,7 +20,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { DataTablePagination } from "./data-table-pagination";
@@ -54,7 +53,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="mb-10 w-[1280px] max-w-full">
+      <div className="mb-10 max-w-full">
         <div className="flex items-center py-4">
           <Input
             placeholder="Filtrar"

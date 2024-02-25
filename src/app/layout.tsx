@@ -4,9 +4,11 @@ import "../../styles/globals.css";
 import { Roboto } from "next/font/google";
 import { CompanyRegisterProvider } from "@/contexts/companyRegister";
 import { Toaster } from "@/components/ui/toaster";
-import { Header } from "@/components/header";
 import NextAuthProvider from "@/configs/NextAuthProvider";
 import { StudentRegisterProvider } from "@/contexts/studentFirstAccessRegister";
+import { AsideMenu } from "@/components/aside-menu";
+import { getServerSession } from "next-auth";
+import { Header } from "@/components/header";
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -23,14 +25,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={roboto.className}>
         <NextAuthProvider>
           <CompanyRegisterProvider>
             <StudentRegisterProvider>
-              <Header />
-              {children}
+              <div className="flex h-screen">
+                <AsideMenu />
+                <div className="flex flex-col w-full pl-52">
+                  <Header />
+                  {children}
+                </div>
+              </div>
             </StudentRegisterProvider>
           </CompanyRegisterProvider>
         </NextAuthProvider>

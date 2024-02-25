@@ -79,7 +79,7 @@ export default function CreateStudent() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <main className="flex flex-col items-center p-24 pt-11">
       <div className="w-max space-y-6 rounded-md border border-gray-200 bg-white p-12 text-center">
         <div className="space-y-2">
           <span className="text-5xl">👨🏻‍💻</span>

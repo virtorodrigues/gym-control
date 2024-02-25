@@ -5,8 +5,8 @@ import Table from "./table/page";
 export const StudentList = async ({ students }: { students: IStudent[] }) => {
 
   return (
-    <div>
-      <h1 className="mb-3 text-3xl">Lista de Alunos</h1>
+    <div className="w-full">
+      <h1 className="mb-3 text-3xl font-bold text-gray-600">Lista de Alunos</h1>
       <Table data={students}/>
     </div>
   );
